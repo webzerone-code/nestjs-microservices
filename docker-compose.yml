@@ -1,0 +1,108 @@
+version: '3.9'
+
+services:
+
+  # -------------------- RabbitMQ --------------------
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+    networks:
+      - microservices
+
+  # -------------------- MongoDB --------------------
+  mongo:
+    image: mongo:7
+    container_name: nest-mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - microservices
+
+  # -------------------- PostgreSQL --------------------
+  postgres:
+    image: postgres:16
+    container_name: nest-postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: main_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - microservices
+
+#  # -------------------- Gateway --------------------
+#  gateway:
+#    build: ./services/gateway
+#    container_name: gateway
+#    depends_on:
+#      - rabbitmq
+#      - mongo
+#      - postgres
+#    ports:
+#      - "3000:3000"
+#    env_file:
+#      - ./services/gateway/.env
+#    networks:
+#      - microservices
+#
+#  # -------------------- Users --------------------
+#  users:
+#    build: ./services/users
+#    container_name: users
+#    depends_on:
+#      - rabbitmq
+#      - postgres
+#    env_file:
+#      - ./services/users/.env
+#    networks:
+#      - microservices
+#
+#  # -------------------- Catalog --------------------
+#  catalog:
+#    build: ./services/catalog
+#    container_name: catalog
+#    depends_on:
+#      - rabbitmq
+#      - mongo
+#    env_file:
+#      - ./services/catalog/.env
+#    networks:
+#      - microservices
+#
+#  # -------------------- Orders --------------------
+#  orders:
+#    build: ./services/orders
+#    container_name: orders
+#    depends_on:
+#      - rabbitmq
+#      - postgres
+#    env_file:
+#      - ./services/orders/.env
+#    networks:
+#      - microservices
+
+# -------------------- NETWORK --------------------
+networks:
+  microservices:
+    driver: bridge
+
+# -------------------- VOLUMES --------------------
+volumes:
+  mongo_data:
+  postgres_data:
