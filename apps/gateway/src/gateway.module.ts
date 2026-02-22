@@ -2,12 +2,37 @@ import { Module } from '@nestjs/common';
 import { GatewayController } from './gateway.controller';
 import { GatewayService } from './gateway.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigType } from '@nestjs/config';
 import JwtConfig from '../config/jwt-config';
+import { MongooseModule } from '@nestjs/mongoose';
+import MongoConfig from '../config/mongo-config';
+import PostgresConfig from '../config/postgres-config';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true, load: [JwtConfig] }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [JwtConfig, MongoConfig, PostgresConfig],
+    }),
+    MongooseModule.forRootAsync({
+      inject: [MongoConfig.KEY],
+      useFactory: (
+        mongoConfig: ConfigType<typeof MongoConfig>,
+      ): { uri: string } => ({
+        uri: mongoConfig.mongoUrlConnection.url,
+      }),
+    }),
+    TypeOrmModule.forRootAsync({
+      inject: [PostgresConfig.KEY],
+      useFactory: (pgConfig: ConfigType<typeof PostgresConfig>) => ({
+        type: pgConfig.postgresConnection.type,
+        url: pgConfig.postgresConnection.url,
+        // optional:
+        // synchronize: true,
+        // autoLoadEntities: true,
+      }),
+    }),
     ClientsModule.register([
       {
         name: 'CATALOG_CLIENT',
