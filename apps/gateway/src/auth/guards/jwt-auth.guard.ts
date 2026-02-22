@@ -1,25 +1,22 @@
 import {
   CanActivate,
   ExecutionContext,
+  ForbiddenException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthService } from '../auth.service';
-import { UserService } from '../../users/user.service';
-import { Observable } from 'rxjs';
 import { IS_PUBLIC_KEY } from '../public.decorator';
+import { REQUIRED_ROLE_KEY } from '../admin.decorator';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
   constructor(
     private readonly reflector: Reflector,
     private readonly authService: AuthService,
-    private readonly userService: UserService,
   ) {}
-  canActivate(
-    context: ExecutionContext,
-  ): boolean | Promise<boolean> | Observable<boolean> {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(),
       context.getClass(),
@@ -36,6 +33,16 @@ export class JwtAuthGuard implements CanActivate {
       : '';
 
     if (!token) throw new UnauthorizedException('Missing Token');
+    const identifyAuthUser: { userId: string; email: string; role: string } =
+      await this.authService.verifyAndBuildContext(token);
+
+    req.user = identifyAuthUser;
+    const requiredRole = this.reflector.getAllAndOverride<string>(
+      REQUIRED_ROLE_KEY,
+      [context.getHandler(), context.getClass()],
+    );
+    if (requiredRole && requiredRole !== identifyAuthUser.role)
+      throw new ForbiddenException('Admin Access Required');
     return true;
   }
 }

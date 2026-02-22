@@ -3,10 +3,11 @@ import { GatewayController } from './gateway.controller';
 import { GatewayService } from './gateway.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ConfigModule } from '@nestjs/config';
+import JwtConfig from '../config/jwt-config';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({ isGlobal: true, load: [JwtConfig] }),
     ClientsModule.register([
       {
         name: 'CATALOG_CLIENT',
