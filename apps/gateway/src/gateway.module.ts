@@ -8,6 +8,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import MongoConfig from '../config/mongo-config';
 import PostgresConfig from '../config/postgres-config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from './auth/auth.module';
+import { UserModule } from './users/user.module';
 
 @Module({
   imports: [
@@ -68,6 +70,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         },
       },
     ]),
+    UserModule,
+    AuthModule,
   ],
   controllers: [GatewayController],
   providers: [GatewayService],

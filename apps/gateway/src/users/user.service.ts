@@ -9,7 +9,12 @@ export class UserService {
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
   ) {}
 
-  async upsertAuthUser(input: { userId: string; email: string; name: string }) {
+  async upsertAuthUser(input: {
+    userId: string;
+    email: string;
+    name: string;
+    password: string;
+  }) {
     const now = new Date();
     return this.userModel.findOneAndUpdate(
       { userId: input.userId },
@@ -17,6 +22,7 @@ export class UserService {
         $set: {
           email: input.email,
           name: input.name,
+          password: input.password,
           updatedAt: now,
         },
         $setOnInsert: { role: 'user' },
@@ -30,5 +36,8 @@ export class UserService {
   }
   async findByUserId(userId: string) {
     return this.userModel.findOne({ userId });
+  }
+  async findByUserByEmail(email: string) {
+    return this.userModel.findOne({ email });
   }
 }
