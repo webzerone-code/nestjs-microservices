@@ -18,9 +18,9 @@ export class AuthService {
   ) {}
   async verifyAndBuildContext(
     token: string,
-  ): Promise<{ userId: string; email: string; role: string }> {
+  ): Promise<{ userId: string; email: string; name: string }> {
     try {
-      const payload: { userId: string; email: string; role: string } =
+      const payload: { userId: string; email: string; name: string } =
         await this.jwtService.verify(token);
       return payload;
     } catch (error) {

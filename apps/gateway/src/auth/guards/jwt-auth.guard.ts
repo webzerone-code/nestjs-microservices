@@ -33,7 +33,7 @@ export class JwtAuthGuard implements CanActivate {
       : '';
 
     if (!token) throw new UnauthorizedException('Missing Token');
-    const identifyAuthUser: { userId: string; email: string; role: string } =
+    const identifyAuthUser: { userId: string; email: string; name: string } =
       await this.authService.verifyAndBuildContext(token);
 
     req.user = identifyAuthUser;
@@ -41,8 +41,8 @@ export class JwtAuthGuard implements CanActivate {
       REQUIRED_ROLE_KEY,
       [context.getHandler(), context.getClass()],
     );
-    if (requiredRole && requiredRole !== identifyAuthUser.role)
-      throw new ForbiddenException('Admin Access Required');
+    // if (requiredRole && requiredRole !== identifyAuthUser.role)
+    //   throw new ForbiddenException('Admin Access Required');
     return true;
   }
 }
