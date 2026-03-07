@@ -13,9 +13,8 @@ export class CreateProductDto {
   @Max(10000000000)
   price: number;
 
-  @IsOptional()
   @IsString()
-  status?: ProductStatus;
+  status: ProductStatus;
 
   @IsOptional()
   @IsString()

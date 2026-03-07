@@ -1,6 +1,6 @@
 import { Controller, InternalServerErrorException } from '@nestjs/common';
 import { ProductsService } from './products.service';
-import { MessagePattern, Payload } from '@nestjs/microservices';
+import { MessagePattern, Payload, RpcException } from '@nestjs/microservices';
 import {
   CreateProductDto,
   GetProductByIdDto,
@@ -17,27 +17,27 @@ export class ProductsController {
     @Payload() createProductDto: CreateProductDto,
   ): Promise<ProductDocument> {
     try {
-      return this.productsService.createNewProduct(createProductDto);
+      return await this.productsService.createNewProduct(createProductDto);
     } catch (e) {
-      throw new InternalServerErrorException(e?.message);
+      throw new RpcException(e.message);
     }
   }
 
   @MessagePattern('product.list')
   async list(): Promise<ProductDocument[]> {
     try {
-      return this.productsService.listProducts();
+      return await this.productsService.listProducts();
     } catch (e) {
-      throw new InternalServerErrorException(e?.message);
+      throw new RpcException(e?.message);
     }
   }
 
   @MessagePattern('product.getById')
   async find(@Payload() input: GetProductByIdDto): Promise<ProductDocument> {
     try {
-      return this.productsService.getProductById(input.productId);
+      return await this.productsService.getProductById(input);
     } catch (e) {
-      throw new InternalServerErrorException(e?.message);
+      throw new RpcException(e?.message);
     }
   }
 
@@ -46,9 +46,9 @@ export class ProductsController {
     @Payload() updateProductDto: UpdateProductDto,
   ): Promise<ProductDocument> {
     try {
-      return this.productsService.updateProduct(updateProductDto);
+      return await this.productsService.updateProduct(updateProductDto);
     } catch (e) {
-      throw new InternalServerErrorException(e?.message);
+      throw new RpcException(e);
     }
   }
 }

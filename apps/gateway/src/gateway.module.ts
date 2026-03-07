@@ -10,6 +10,7 @@ import PostgresConfig from '../config/postgres-config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './users/user.module';
+import { ProductsController } from './products/products.controller';
 
 @Module({
   imports: [
@@ -73,7 +74,7 @@ import { UserModule } from './users/user.module';
     UserModule,
     AuthModule,
   ],
-  controllers: [GatewayController],
+  controllers: [GatewayController, ProductsController],
   providers: [GatewayService],
 })
 export class GatewayModule {}

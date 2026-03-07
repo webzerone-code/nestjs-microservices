@@ -28,6 +28,7 @@ export class ProductsService {
       imageUrl: input.imageUrl ?? '',
       userId: input.userId,
     });
+    if (!product) throw new BadRequestException('Failed to create product');
     return product;
   }
 
