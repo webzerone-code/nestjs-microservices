@@ -4,7 +4,7 @@ export class UploadProductImageDto {
   @IsString()
   fileName: string;
   @IsString()
-  mimetype: string;
+  mimeType: string;
   @IsString()
   base64: string;
   @IsString()

@@ -70,9 +70,11 @@ export class ProductsController {
           }),
         );
         imageUrl = uploadResult.url;
-        mediaId = uploadResult._id;
+        mediaId = String(uploadResult._id);
       } catch (e) {
-        throw new InternalServerErrorException(e);
+        throw new InternalServerErrorException(
+          e?.message || 'Failed to upload image',
+        );
       }
     }
 
@@ -92,20 +94,15 @@ export class ProductsController {
           catchError((err) => throwError(err)),
         ),
       );
-
       // Attach media to product
       if (mediaId) {
-        try {
-          await firstValueFrom(
-            this.catalogClient.send('media.attachToProduct', {
-              mediaId,
-              productId: result._id,
-              attachedByUserId: user.userId,
-            }),
-          );
-        } catch (e) {
-          throw new InternalServerErrorException(e);
-        }
+        const media = await firstValueFrom(
+          this.mediaClient.send('media.attachToProduct', {
+            mediaId,
+            productId: String(result._id),
+            attachedByUserId: user.userId,
+          }),
+        );
       }
 
       return result;

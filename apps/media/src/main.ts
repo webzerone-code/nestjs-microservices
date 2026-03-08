@@ -1,7 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { MediaModule } from './media.module';
 import { Logger, ValidationPipe } from '@nestjs/common';
-import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import {
+  MicroserviceOptions,
+  RpcException,
+  Transport,
+} from '@nestjs/microservices';
 
 async function bootstrap() {
   process.title = 'media';
@@ -32,14 +36,26 @@ async function bootstrap() {
       },
     },
   );
-  app.enableShutdownHooks();
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
       forbidNonWhitelisted: true,
       transform: true,
+      exceptionFactory: (errors) => {
+        const messages = errors
+          .map((err) => Object.values(err.constraints || {}))
+          .flat();
+
+        // Send a clean object back to the Gateway
+        return new RpcException({
+          statusCode: 400,
+          message: messages,
+        });
+      },
     }),
   );
+  app.enableShutdownHooks();
+
   await app.listen();
   logger.log(`Media microservice (RMQ) port ${queue}`);
 }

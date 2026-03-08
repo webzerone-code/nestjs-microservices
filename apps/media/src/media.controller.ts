@@ -31,7 +31,7 @@ export class MediaController {
     try {
       return await this.mediaService.attachToProduct(payload);
     } catch (e) {
-      throw new RpcException(e.message);
+      throw new RpcException({ statusCode: 400, message: e });
     }
   }
 }

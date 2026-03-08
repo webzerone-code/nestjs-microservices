@@ -55,7 +55,7 @@ export class MediaService {
 
   async attachToProduct(input: AttachToProductDto): Promise<MediaDocument> {
     if (!isValidObjectId(input.mediaId))
-      throw new RpcException('Invalid media id');
+      throw new RpcException({ statusCode: 400, message: 'Invalid media id' });
     const update = await this.mediaModel
       .findByIdAndUpdate(
         input.mediaId,
@@ -65,7 +65,8 @@ export class MediaService {
         { new: true },
       )
       .exec();
-    if (!update) throw new RpcException('Failed to attach media to product');
+    if (!update)
+      throw new RpcException({ statusCode: 400, message: 'Invalid media id' });
     return update;
   }
 
