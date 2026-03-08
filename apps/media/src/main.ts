@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { MediaModule } from './media.module';
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 
 async function bootstrap() {
@@ -33,6 +33,13 @@ async function bootstrap() {
     },
   );
   app.enableShutdownHooks();
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+    }),
+  );
   await app.listen();
   logger.log(`Media microservice (RMQ) port ${queue}`);
 }
