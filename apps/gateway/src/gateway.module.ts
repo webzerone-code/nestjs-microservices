@@ -11,6 +11,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './users/user.module';
 import { ProductsController } from './products/products.controller';
+import { SearchController } from './products/search/search.controller';
 
 @Module({
   imports: [
@@ -74,7 +75,7 @@ import { ProductsController } from './products/products.controller';
     UserModule,
     AuthModule,
   ],
-  controllers: [GatewayController, ProductsController],
+  controllers: [GatewayController, ProductsController, SearchController],
   providers: [GatewayService],
 })
 export class GatewayModule {}

@@ -11,12 +11,14 @@ import {
   UpdateProductDto,
 } from './create-product.dto';
 import { isValidObjectId, Model } from 'mongoose';
+import { ProductEventsPublisher } from '../events/product-events.publisher';
 
 @Injectable()
 export class ProductsService {
   constructor(
     @InjectModel(Product.name)
     private readonly productModel: Model<Product>,
+    private readonly event: ProductEventsPublisher,
   ) {}
 
   async createNewProduct(input: CreateProductDto): Promise<ProductDocument> {
@@ -29,6 +31,15 @@ export class ProductsService {
       userId: input.userId,
     });
     if (!product) throw new BadRequestException('Failed to create product');
+    await this.event.productCreated({
+      productId: String(product._id),
+      name: product.name,
+      description: product.description,
+      status: product.status,
+      price: product.price,
+      imageUrl: product.imageUrl,
+      userId: product.userId,
+    });
     return product;
   }
 
