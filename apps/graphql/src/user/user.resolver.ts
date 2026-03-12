@@ -10,7 +10,10 @@ import { User } from '../entities/user.entity';
 import { Query } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { CreateUserInputDto } from './dto/create-user.input.dto';
+import { UseGuards } from '@nestjs/common';
+import { AuthGuard } from '../auth/auth.guard';
 
+@UseGuards(AuthGuard)
 @Resolver(() => User)
 export class UserResolver {
   constructor(private readonly userService: UserService) {}

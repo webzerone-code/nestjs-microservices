@@ -39,7 +39,7 @@ export class User {
   username: string;
 
   @Field()
-  @Column()
+  @Column({ unique: true })
   email: string;
 
   @Field(() => Role)

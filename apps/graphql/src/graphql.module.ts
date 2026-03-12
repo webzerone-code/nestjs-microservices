@@ -6,10 +6,11 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { GraphQLModule } from '@nestjs/graphql';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import JwtConfig from './config/jwt-config';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true, load: [dbConfig] }),
+    ConfigModule.forRoot({ isGlobal: true, load: [dbConfig, JwtConfig] }),
     TypeOrmModule.forRootAsync({
       name: 'relationOne',
       useFactory: dbConfig,
