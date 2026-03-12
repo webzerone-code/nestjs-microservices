@@ -27,6 +27,15 @@
         "tsConfigPath": "apps/gateway/tsconfig.app.json"
       }
     },
+    "graphql": {
+      "type": "application",
+      "root": "apps/graphql",
+      "entryFile": "main",
+      "sourceRoot": "apps/graphql/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/graphql/tsconfig.app.json"
+      }
+    },
     "media": {
       "type": "application",
       "root": "apps/media",
