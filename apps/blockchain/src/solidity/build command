@@ -1,0 +1,1 @@
+solcjs --bin --abi -o .\apps\blockchain\src\solidity\build  .\apps\blockchain\src\solidity\SimpleStorage.sol

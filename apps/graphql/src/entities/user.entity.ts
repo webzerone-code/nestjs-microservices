@@ -13,7 +13,7 @@ import { Role } from '../enums/role.enum';
 import { Exclude } from 'class-transformer';
 
 @ObjectType()
-@Entity()
+@Entity({ name: 'users' })
 export class User {
   constructor(partial?: Partial<User>) {
     Object.assign(this, partial);

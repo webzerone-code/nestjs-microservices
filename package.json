@@ -18,10 +18,11 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./apps/nestjs-microservices/test/jest-e2e.json",
-    "migration:generate:graphql": "typeorm-ts-node-commonjs -d apps/graphql/src/config/typeorm.datasource.ts migration:generate",
-    "migration:create:graphql": "typeorm-ts-node-commonjs -d apps/graphql/src/config/typeorm.datasource.ts migration:create",
-    "migration:run:graphql": "typeorm-ts-node-commonjs -d apps/graphql/src/config/typeorm.datasource.ts migration:run",
-    "migration:revert:graphql": "typeorm-ts-node-commonjs -d apps/graphql/src/config/typeorm.datasource.ts migration:revert"
+    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
+    "migration:generate": "npm run typeorm -- --dataSource=./apps/graphql/src/config/db.datasource.ts migration:generate",
+    "migration:create": "typeorm migration:create",
+    "migration:run": "npm run typeorm -- --dataSource=./apps/graphql/src/config/db.datasource.ts migration:run",
+    "migration:revert": "npm run typeorm -- --dataSource=./apps/graphql/src/config/db.datasource.ts migration:revert"
   },
   "dependencies": {
     "@apollo/server": "^5.4.0",

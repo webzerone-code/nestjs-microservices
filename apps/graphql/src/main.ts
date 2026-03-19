@@ -11,3 +11,10 @@ async function bootstrap() {
   await app.listen(port);
 }
 bootstrap();
+//--packages.json under scripts
+// "migration:create": "typeorm migration:create"
+//--- Command Lines
+// Manual
+//npm run migration:create ./apps/graphql/src/migrations/initial-schema
+// generated
+// npm run migration:generate ./apps/graphql/src/migrations/generated

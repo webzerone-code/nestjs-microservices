@@ -9,6 +9,15 @@
   "monorepo": true,
   "root": ".",
   "projects": {
+    "blockchain": {
+      "type": "application",
+      "root": "apps/blockchain",
+      "entryFile": "main",
+      "sourceRoot": "apps/blockchain/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/blockchain/tsconfig.app.json"
+      }
+    },
     "catalog": {
       "type": "application",
       "root": "apps/catalog",

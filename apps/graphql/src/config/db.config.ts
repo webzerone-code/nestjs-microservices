@@ -11,6 +11,6 @@ export default registerAs(
     url: process.env.POSTGRES_URL,
     type: 'postgres',
     entities: [User, Post, Profile, Tag],
-    synchronize: true,
+    synchronize: false,
   }),
 );
