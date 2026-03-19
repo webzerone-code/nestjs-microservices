@@ -1,0 +1,24 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout_code
+        uses: actions/checkout@v4
+
+      - name: Set_up_Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install_dependencies
+        run: npm install
+
+      - name: Run_tests
+        run: npm test

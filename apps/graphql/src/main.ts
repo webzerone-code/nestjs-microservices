@@ -12,7 +12,10 @@ async function bootstrap() {
 }
 bootstrap();
 //--packages.json under scripts
-// "migration:create": "typeorm migration:create"
+// "migration:generate": "npm run typeorm -- --dataSource=./apps/graphql/src/config/db.datasource.ts migration:generate",
+// "migration:create": "typeorm migration:create",
+// "migration:run": "npm run typeorm -- --dataSource=./apps/graphql/src/config/db.datasource.ts migration:run",
+// "migration:revert": "npm run typeorm -- --dataSource=./apps/graphql/src/config/db.datasource.ts migration:revert"
 //--- Command Lines
 // Manual
 //npm run migration:create ./apps/graphql/src/migrations/initial-schema
